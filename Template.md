@@ -12,12 +12,16 @@ def bfs(graph):
         for _ in range(size):
             parent = dq.popleft()
             
+            ### return step here if you want to
+            
             for child in graph[parent]:
                 ### deal edge cases: 1) cross boundaries if the graph is a matrix; 2) visited nodes; 3) other conditions based on different problems
                 if child in visited:
                     continue
                 dq.append(child)
                 visited.add(child)
+                
+                ### return step + 1 here if you want to
         
         step += 1
 ```
