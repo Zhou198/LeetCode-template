@@ -32,7 +32,7 @@ BFS usually is used to <ins>**solve the problems involved with the shortest dist
 
 
 
-### Union-Find/Disjoint set
+### Union-Find / Disjoint set
 ```py
 def numOfgroups(n, edges):
     parent = [i for i in range(n)]
