@@ -75,5 +75,36 @@ For each pair in **edges**, we will union them together if they haven't been, ac
 - Function **find** makes the height of each group (tree) is 2 at most, which makes it efficient when we call this function later. Use **find** (NOT **parent**) to return the representor (root) of each group.
 - **rank** is another trick to improve efficiency further.
 
+### Dijkstra
+```py
+def smallestWghSum(edges, source):
+    graph = defaultdict(list)
+    for node1, node2, wgh in enumerate(edges):
+        graph[node1].append([node2, wgh])
+        graph[node2].append([node1, wgh])
+    n = len(graph)
+        
+    gDist2Node = [inf] * n
+    gDist2Node[source] = 0
+    
+    pq = [(wgh, source)]
+    heapq.heapify(pq)
+    
+    while pq:
+        lDist2Parent, parent = heapq.heappop(pq)
+        
+        ### if lDist2Parent > gDist2Node[parent]:
+        ###     continue
+            
+        for child, wgh in graph[node]:
+            lDist2Child = lDist2Parent + wgh
+            
+            if lDist2Child < gDist2Node[child]:
+                gDist2Node[child] = lDist2Child
+                heapq.heappush(pq, (lDist2Child, child))
+    return gDist2Node
+```
+Dijkstra is applied on the <ins>**weighted bi-directional graph**</ins>. It is one variant of BFS to calculate the smallest weighted steps </ins>**from a single source to target(s)**</ins>.
+Dijkstra is a greedy algorithm, where everytime the algorithm picks a current/local smallest weight sum. To gaurantee every time we start off a node with smallest weight sum from target, we use a priority queue to dynamically store those locally optimal roots.
 
 
