@@ -1,3 +1,55 @@
+### Backtracking -- Combination & Permutation
+```py
+class Combination:
+    def combReturn(nums: list, k: int) -> int:
+        nums.sort()
+        path, result = [], []
+        start = 0
+        self.dfs(nums, k, path, result, start)
+        return result
+        
+    def dfs(self, nums, k, path, result, start):
+        if len(path) == k:
+            result.append(path[:])
+            return
+            
+        for i in range(start, len(nums)):
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+            path.append(nums[i])
+            self.dfs(nums, k, path, result, i + 1)
+            path.pop()
+            
+class Permutation:
+    def permReturn(nums: list, k: int) -> int:
+        nums.sort()
+        path, result = [], []
+        self.dfs(nums, k, path, result)
+        return result
+        
+    def dfs(self, nums, k, path, result):
+        if len(path) == k:
+            result.append(path[:])
+            return
+            
+        for i in range(len(nums)):
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+            if nums[i] == "*":
+                continue
+                
+            path.append(nums[i])
+            temp, nums[i] = nums[i], "*"
+            self.dfs(nums, k, path, result)
+            nums[i] = temp
+            path.pop()
+```
+- Backtracking is a brute force way to find all possible results.
+- Different from the permutation, combinations (or a set) do not consider the order in the outcome. So we use **start** to avoid duplicated outcomes (like [1, 2] and [2, 1]). The **start** means that, under current result **path**, we only consider to add elements from **start** in **nums**. For example, when **path=[2]**, then it can be extended to **[2, 3], [2, 4], ...** due to 3 > 2. However, since permutation does take the order into account, the search space always starts from the very beginning index 0 in permutation, and hence we do not have to create **start**.
+- Since the permutation searches from the very beginning every time, to avoid adding the value with the same index again, we need to use lines 38 -- 39, 42, and 44 to achieve this goal. However, in combination, we needn't bother it since we search for **nums[i + 1 : ....]** (see i + 1 in dfs) when we have **nums[i]** in the current **path**. 
+- Lines 5 and 17 -- 18 (resp. lines 25, 36 -- 37) are used to deal with the duplications in input **nums**: let duplications appear together and skip those duplications we visited before.
+
+
 ### Topological Sorting
 ```py
 ### This actually is LeetCode 207 -- Course Schedule
@@ -32,7 +84,7 @@ def circleDet(edges):
 ```
 Topological Sorting (BFS) usually is used to <ins>**solve the problems involved with node dependency or circle detecting**</ins>.
 - Key things are to 1) build a graph (usually we are given edges), 2) build a map to record inDegree (or outDegree in some different problems), and 3) create a deque to store all nodes with 0 degrees.
-- Topological Sorting's idea is working on a node with 0 indegrees (from the boundary of the graph to the center) and gradually decrease the indegree for inner layers.
+- Topological Sorting's idea is working on a node with 0 indegrees (from the boundary of the graph to the center) and gradually decreasing the indegree for inner layers.
 - The map in Degree can be realized by a list instead of a hashmap if nodes are encoded as 0, 1, ..., n - 1.
 - Suppose the number of edges and nodes are |E| and |V|, respectively. Then the time complexity is O(|E| + |V|) and the space complexity is O(|E| + |V|).
 
